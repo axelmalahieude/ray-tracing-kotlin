@@ -4,9 +4,7 @@ import geometry.Coordinate
 import geometry.Ray
 import geometry.SceneObject
 
-class Scene(
-    val viewport: Viewport
-) {
+class Scene() {
     /**
      * Holds all of the objects in the scene to be rendered
      * Can handle intersection calculation

@@ -13,7 +13,7 @@ fun main() {
     val height = 4
     val viewport = Viewport(width, height)
 
-    val scene = Scene(viewport)
+    val scene = Scene()
     val sphere = Sphere(Coordinate(0.0, 100.0, 200.0), 100.0, Color(255, 0, 0, 255))
     scene.addObject(sphere)
 

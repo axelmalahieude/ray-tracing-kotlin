@@ -12,4 +12,8 @@ class Coordinate(
     operator fun minus(arg: Coordinate): Vector {
         return Vector(x - arg.x, y - arg.y, z - arg.z)
     }
+
+    override fun toString(): String {
+        return "($x, $y, $z)"
+    }
 }

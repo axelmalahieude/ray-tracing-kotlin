@@ -1,10 +1,13 @@
 package graphics
 
 import geometry.Coordinate
+import geometry.Intersection
 import geometry.Ray
 import geometry.SceneObject
 
-class Scene() {
+class Scene(
+    val lightPos: Coordinate // TODO: Add support for multiple lights
+) {
     /**
      * Holds all of the objects in the scene to be rendered
      * Can handle intersection calculation
@@ -20,12 +23,12 @@ class Scene() {
     /**
      * Determine if a ray intersects any object in this scene
      */
-    fun findIntersection(ray: Ray): Coordinate? {
+    fun findIntersection(ray: Ray): Intersection? {
         objects.forEach {
-            val intersection = it.intersect(ray)
+            val point = it.intersect(ray)
             // TODO: Fix this code to support if ray intersects multiple objects; return closest intersection
-            if (intersection != null) {
-                return intersection
+            if (point != null) {
+                return Intersection(point, it)
             }
         }
         return null

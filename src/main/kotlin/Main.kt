@@ -14,16 +14,13 @@ fun main() {
     val height = 480
     val viewport = Viewport(width, height)
 
-    val scene = Scene()
+    val lightPos = Coordinate(-240.0, -240.0, 0.0) // top right, in front of sphere
+    val scene = Scene(lightPos)
     val sphere = Sphere(Coordinate(0.0, 0.0, 300.0), 250.0, Color(255, 0, 0, 255))
     scene.addObject(sphere)
 
     val raytracer = Raytracer(viewport, scene)
-    raytracer.render(width, height)
-
-    val image = Image(width, height)
-    image.randomlyAssignPixels()
-    image.outputToFile()
-
+    val output = raytracer.render(width, height)
+    output.outputToFile()
 }
 

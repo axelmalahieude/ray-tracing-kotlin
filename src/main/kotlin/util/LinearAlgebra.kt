@@ -23,4 +23,8 @@ object LinearAlgebra {
     fun dotProduct(v1: Vector, v2: Vector): Double {
         return v1.i * v2.i + v1.j * v2.j + v1.k * v2.k
     }
+
+    fun distance(c1: Coordinate, c2: Coordinate): Double {
+        return sqrt((c1.x - c2.x) * (c1.x - c2.x) + (c1.y - c2.y) * (c1.y - c2.y) + (c1.z - c2.z) * (c1.z - c2.z))
+    }
 }

@@ -4,6 +4,7 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_ARGB
 import java.io.File
+import java.sql.Timestamp
 import java.util.*
 import javax.imageio.ImageIO
 import kotlin.math.min
@@ -21,7 +22,7 @@ class Image(
     private val imageDirectory = File("images")
     private val fileSeparator = System.getProperty("file.separator")
 
-    private val pixels : Array<Array<Color>> = Array(yMax) { Array(xMax) { Color(0, 0, 0, 255) } }
+    val pixels : Array<Array<Color>> = Array(yMax) { Array(xMax) { Color(0, 0, 0, 255) } }
 
     fun randomlyAssignPixels() {
         for (i in 0 until yMax) {
@@ -34,7 +35,7 @@ class Image(
     fun outputToFile() {
         val bufferedImage = BufferedImage(width, height, TYPE_INT_ARGB)
         for (i in 0 until yMax) {
-            for (j in 1 until xMax) {
+            for (j in 0 until xMax) {
                 val pixel = pixels[i][j]
                 bufferedImage.setRGB(j, i, pixel.rgb)
             }
@@ -43,7 +44,8 @@ class Image(
         if (!imageDirectory.exists()) {
             imageDirectory.mkdir()
         }
-        val fileName = "${Date().time}.png"
+        val fileName = Timestamp(Date().time).toString().replace(':', '-').split('.')[0] + ".png"
+        println(fileName)
         val outputFile = File("$imageDirectory$fileSeparator$fileName")
         outputFile.createNewFile()
         ImageIO.write(bufferedImage, "png", outputFile)

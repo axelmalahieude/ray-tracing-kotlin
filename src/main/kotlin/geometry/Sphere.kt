@@ -2,14 +2,13 @@ package geometry
 
 import util.LinearAlgebra
 import java.awt.Color
-import java.lang.Float.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
 class Sphere(
     override val center : Coordinate,
     private val radius : Double,
-    var color : Color = Color(255, 0, 0, 255)
+    var color : Color
 ) : SceneObject {
 
     /**
@@ -21,16 +20,21 @@ class Sphere(
         val b = 2 * LinearAlgebra.dotProduct(ray.direction, centeredRayStart)
         val c = LinearAlgebra.dotProduct(centeredRayStart, centeredRayStart) - radius * radius
 
-        val discriminant = b * b - 4   * c
+        val discriminant = b * b - 4 * c
         return when {
-            // no intersection
-            discriminant == 0.0 -> ray.pointAlongRay(-b / 2)
+            // ensure intersections are in front of the ray by checking for positive intersection times
+            discriminant == 0.0 -> {
+                val t = -b / 2
+                if (t > 0) ray.pointAlongRay(t)
+                else null
+            }
             discriminant > 0.0 -> {
                 val sq = sqrt(discriminant)
                 val t0 = (-b + sq) / 2
                 val t1 = (-b - sq) / 2
-                val intersection = min(t0, t1)
-                ray.pointAlongRay(intersection)
+                if (t0 > 0 && t1 > 0) {
+                    ray.pointAlongRay(min(t0, t1))
+                } else null
             }
             else -> null // discriminant < 0.0
         }
@@ -49,6 +53,10 @@ class Sphere(
         val g = dot * color.green * incomingIntensity
         val b = dot * color.blue * incomingIntensity
         val alpha = color.alpha.toFloat() // don't scale alpha
-        return Color(r / 255, g / 255, b / 255, alpha / 255)
+        return Color(r / 255, g / 255 , b / 255, alpha / 255)
+    }
+
+    override fun contains(ray: Ray): Boolean {
+        return LinearAlgebra.distance(ray.origin, center) <= radius + 1 // adjust for acne/rounding errors
     }
 }

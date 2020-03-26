@@ -2,6 +2,7 @@ package graphics
 
 import geometry.Coordinate
 import geometry.Ray
+import geometry.Vector
 import util.LinearAlgebra
 
 /**

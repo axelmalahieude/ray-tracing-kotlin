@@ -5,14 +5,13 @@ import geometry.Intersection
 import geometry.Ray
 import geometry.SceneObject
 
+/**
+ * Holds all of the objects in the scene to be rendered
+ * Can handle intersection calculation
+ */
 class Scene(
     val lightPos: Coordinate // TODO: Add support for multiple lights
 ) {
-    /**
-     * Holds all of the objects in the scene to be rendered
-     * Can handle intersection calculation
-     */
-
     private val objects : MutableList<SceneObject> = mutableListOf()
 
     fun addObject(obj : SceneObject) {

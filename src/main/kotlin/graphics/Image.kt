@@ -4,29 +4,26 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_ARGB
 import java.io.File
+import java.util.Date
 import java.sql.Timestamp
-import java.util.*
 import javax.imageio.ImageIO
 import kotlin.math.min
 
+/**
+ * Stores information for each pixel
+ */
 class Image(
     private val width : Int,
     private val height: Int
 ) {
-    /**
-     * Stores information for each pixel
-     */
-
-    val xMax = width
-    val yMax = height
     private val imageDirectory = File("images")
     private val fileSeparator = System.getProperty("file.separator")
 
-    val pixels : Array<Array<Color>> = Array(yMax) { Array(xMax) { Color(0, 0, 0, 255) } }
+    val pixels : Array<Array<Color>> = Array(height) { Array(width) { Color(0, 0, 0, 255) } }
 
     fun randomlyAssignPixels() {
-        for (i in 0 until yMax) {
-            for (j in 0 until xMax) {
+        for (i in 0 until height) {
+            for (j in 0 until width) {
                 pixels[i][j] = Color(min(i, 255), min(j, 255), 0, 255)
             }
         }
@@ -34,10 +31,10 @@ class Image(
 
     fun outputToFile() {
         val bufferedImage = BufferedImage(width, height, TYPE_INT_ARGB)
-        for (i in 0 until yMax) {
-            for (j in 0 until xMax) {
-                val pixel = pixels[i][j]
-                bufferedImage.setRGB(j, i, pixel.rgb)
+        for (r in 0 until height) {
+            for (c in 0 until width) {
+                val pixel = pixels[height - 1 - r][c] // make height go from MAX -> 0 otherwise image is flipped
+                bufferedImage.setRGB(c, r, pixel.rgb)
             }
         }
 

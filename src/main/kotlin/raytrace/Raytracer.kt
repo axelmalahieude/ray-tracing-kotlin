@@ -9,8 +9,9 @@ class Raytracer(
 ) {
 
     fun render(width: Int, height: Int) {
-        for (r in 0..height) {
-            for (c in 0..width) {
+        var nInts = 0
+        for (r in 0 until height) {
+            for (c in 0 until width) {
                 // determine ray from eye through pixel
                 val ray = viewport.getRay(r, c)
 
@@ -18,8 +19,8 @@ class Raytracer(
                 val intersection = scene.findIntersection(ray)
 
                 //////testing
-
-                println("$r, $c, $intersection")
+                if (intersection != null) nInts++
+//                println("$r, $c, $intersection")
 
                 //////testing end
 
@@ -29,5 +30,7 @@ class Raytracer(
                 // paint pixel
             }
         }
+        println("Number intersections: $nInts")
+        println("Total pixels: ${height * width}")
     }
 }

@@ -10,6 +10,10 @@ class Vector(
         return Vector(i / n, j / n, k / n)
     }
 
+    operator fun times(n: Double): Vector {
+        return Vector(i * n, j * n, k * n)
+    }
+
     override fun toString(): String {
         return "<$i, $j, $k>"
     }

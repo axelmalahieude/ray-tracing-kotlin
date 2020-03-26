@@ -1,34 +1,27 @@
 import geometry.Coordinate
-import geometry.Vector
-import util.LinearAlgebra.normalize
+import geometry.Sphere
+import graphics.Scene
+import graphics.Viewport
+import raytrace.Raytracer
+import java.awt.Color
 
-data class Coordinate2D(val x: Double, val y: Double)
 
 fun main() {
-    //
-    // Set up camera and image plane, with everything along z axis
 
-    // set up camera
-    val eye = Coordinate(0.0, 0.0, 0.0)
+    // Set up camera and image plane
+    val width = 4
+    val height = 4
+    val viewport = Viewport(width, height)
 
-    // set up image plane
-    val width = 480.0
-    val height = 480.0
+    val scene = Scene(viewport)
+    val sphere = Sphere(Coordinate(0.0, 100.0, 200.0), 100.0, Color(255, 0, 0, 255))
+    scene.addObject(sphere)
 
-    // center image plane at (0, 0) by recomputing bounds
-    val maxX = width / 2
-    val maxY = height / 2
-    val lowerLeft = Coordinate2D(-maxX, -maxY)
-    println(lowerLeft)
+    val raytracer = Raytracer(viewport, scene)
+    raytracer.render(width, height)
 
-//    val scene = Scene()
-//    val sphere = Sphere(Coordinate(0.0, 0.0, 0.0), 1.0, Color(255, 0, 0, 255))
-//    scene.addObject(sphere)
-}
+    // testing
 
-// move all this to a new viewport class that handles it all
-fun calcPixelCoordinate(r: Int, c: Int) {
-    // row, column
 
 }
 

@@ -1,5 +1,7 @@
 package geometry
 
 interface SceneObject {
-    val location : Coordinate
+    val center : Coordinate
+
+    fun intersect(ray: Ray): Coordinate?
 }

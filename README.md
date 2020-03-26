@@ -1,9 +1,12 @@
-# ray-tracing-kotlin
+# Kotlin Ray Tracing
 Ray tracing application made in Kotlin
 
-Goal is to be able to create a scene with one or more spheres on a surface, and render an image using ray tracing. 
+Goal is to be able to create a scene with one or more spheres on a surface, and render an image using ray tracing.
+
+Current progress: the app is able to generate an image of a sphere by tracing the shadow ray to the light source and applying Lambertian reflectance. 
 
 Current to dos:
-- Set up viewport with image plane and camera
-- Set up scene with sphere objects
-- Actual ray tracing...
+- Trace the reflected ray
+- Create surface under spheres
+- Eventually add linear transformations to make scene building easier
+

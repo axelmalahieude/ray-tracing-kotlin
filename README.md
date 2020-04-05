@@ -10,4 +10,5 @@ See examples in `images/`
 - Trace the reflected ray
 - Create surface under spheres
 - Eventually add linear transformations to make scene building easier
+- Consolidate coordinate and vector classes
 

@@ -6,7 +6,7 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 class Sphere(
-    override val center : Coordinate,
+    private val center : Coordinate,
     private val radius : Double,
     var color : Color
 ) : SceneObject {
@@ -56,7 +56,7 @@ class Sphere(
         return Color(r / 255, g / 255 , b / 255, alpha / 255)
     }
 
-    override fun contains(ray: Ray): Boolean {
-        return LinearAlgebra.distance(ray.origin, center) <= radius + 1 // adjust for acne/rounding errors
-    }
+//    fun contains(ray: Ray): Boolean {
+//        return LinearAlgebra.distance(ray.origin, center) <= radius + 1 // adjust for acne/rounding errors
+//    }
 }

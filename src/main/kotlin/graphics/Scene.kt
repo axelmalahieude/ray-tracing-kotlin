@@ -4,6 +4,7 @@ import geometry.Coordinate
 import geometry.Intersection
 import geometry.Ray
 import geometry.SceneObject
+import util.LinearAlgebra
 
 /**
  * Holds all of the objects in the scene to be rendered
@@ -23,13 +24,18 @@ class Scene(
      * Determine if a ray intersects any object in this scene
      */
     fun findIntersection(ray: Ray): Intersection? {
+        var intersection: Intersection? = null
+        var currDist = Double.MAX_VALUE
         objects.forEach {
             val point = it.intersect(ray)
-            // TODO: Fix this code to support if ray intersects multiple objects; return closest intersection
             if (point != null) {
-                return Intersection(point, it)
+                val dist = LinearAlgebra.distance(ray.origin, point)
+                if (dist < currDist) {
+                    intersection = Intersection(point, it)
+                    currDist = dist
+                }
             }
         }
-        return null
+        return intersection
     }
 }

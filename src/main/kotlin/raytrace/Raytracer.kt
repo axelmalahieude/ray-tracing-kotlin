@@ -13,7 +13,6 @@ class Raytracer(
 ) {
 
     fun render(width: Int, height: Int): Image {
-        var cc = 0
         val image = Image(width, height)
         for (r in 0 until height) {
             for (c in 0 until width) {
@@ -31,7 +30,6 @@ class Raytracer(
                     image.pixels[r][c] = Color(0, 0, 0, 255)
                 } else {
                     // no intersection between point and light source; light illuminates this point
-                    cc++
                     image.pixels[r][c] = intersection.obj.lambertianReflectance(intersection.point, scene.lightPos)
                 }
 
@@ -40,7 +38,6 @@ class Raytracer(
                 // paint pixel
             }
         }
-        println(cc)
         return image
     }
 }

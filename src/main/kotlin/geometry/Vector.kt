@@ -2,11 +2,29 @@ package geometry
 
 import kotlin.math.sqrt
 
-class Vector(
-    var i : Double,
-    var j : Double,
-    var k : Double
-) {
+class Vector() {
+
+    companion object {
+        val VEC_I = Vector(1.0, 0.0, 0.0)
+        val VEC_J = Vector(0.0, 1.0, 0.0)
+        val VEC_K = Vector(0.0, 0.0, 1.0)
+    }
+
+    var i: Double = 0.0
+    var j: Double = 0.0
+    var k: Double = 0.0
+
+    constructor(c: Coordinate) : this() {
+        this.i = c.x
+        this.j = c.y
+        this.k = c.z
+    }
+
+    constructor(i : Double, j : Double, k : Double) : this() {
+        this.i = i
+        this.j = j
+        this.k = k
+    }
 
     operator fun div(n: Double): Vector {
         return Vector(i / n, j / n, k / n)

@@ -1,9 +1,10 @@
 import geometry.Coordinate
 import geometry.Sphere
-import graphics.Image
+import geometry.Vector
 import graphics.Scene
 import graphics.Viewport
 import raytrace.Raytracer
+import util.LinearAlgebra
 import java.awt.Color
 
 

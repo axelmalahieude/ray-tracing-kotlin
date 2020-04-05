@@ -20,8 +20,15 @@ object LinearAlgebra {
         return Vector(end.x - start.x, end.y - start.y, end.z - start.z)
     }
 
-    fun dotProduct(v1: Vector, v2: Vector): Double {
-        return v1.i * v2.i + v1.j * v2.j + v1.k * v2.k
+    fun dotProduct(a: Vector, b: Vector): Double {
+        return a.i * b.i + a.j * b.j + a.k * b.k
+    }
+
+    fun crossProduct(a: Vector, b: Vector): Vector {
+        val ii = a.j * b.k - a.k * b.j
+        val jj = a.k * b.i - a.i * b.k
+        val kk = a.i * b.j - a.j * b.i
+        return Vector(ii, jj, kk)
     }
 
     fun distance(c1: Coordinate, c2: Coordinate): Double {

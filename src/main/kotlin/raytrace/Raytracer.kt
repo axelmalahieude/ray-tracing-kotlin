@@ -23,7 +23,7 @@ class Raytracer(
                 val intersection = scene.findIntersection(ray) ?: continue
 
                 // cast shadow ray to the light source
-                val shadowRayDirection = LinearAlgebra.normalize(LinearAlgebra.calcVector(intersection.point, scene.lightPos))
+                val shadowRayDirection = scene.lightPos - intersection.point
                 val shadowRay = Ray(intersection.point, shadowRayDirection)
                 if (scene.findIntersection(shadowRay) != null) {
                     // no contribution from this light source; something is blocking it

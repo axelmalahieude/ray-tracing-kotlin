@@ -1,12 +1,12 @@
 package geometry
 
-import util.LinearAlgebra
+import util.LinearAlgebra as LA
 import java.awt.Color
 import kotlin.math.min
 import kotlin.math.sqrt
 
 class Sphere(
-    private val center : Coordinate,
+    private val center : Vector,
     private val radius : Double,
     var color : Color
 ) : SceneObject {
@@ -14,11 +14,11 @@ class Sphere(
     /**
      * Determine if a ray intersects this sphere
      */
-    override fun intersect(ray: Ray): Coordinate? {
+    override fun intersect(ray: Ray): Vector? {
         val centeredRayStart = ray.origin - center
 
-        val b = 2 * LinearAlgebra.dotProduct(ray.direction, centeredRayStart)
-        val c = LinearAlgebra.dotProduct(centeredRayStart, centeredRayStart) - radius * radius
+        val b = 2 * LA.dotProduct(ray.direction, centeredRayStart)
+        val c = LA.dotProduct(centeredRayStart, centeredRayStart) - radius * radius
 
         val discriminant = b * b - 4 * c
         return when {
@@ -40,10 +40,10 @@ class Sphere(
         }
     }
 
-    override fun lambertianReflectance(pos: Coordinate, lightPos: Coordinate): Color {
-        val lightVector = LinearAlgebra.normalize(LinearAlgebra.calcVector(pos, lightPos))
-        val normal = LinearAlgebra.normalize(LinearAlgebra.calcVector(center, pos))
-        var dot = LinearAlgebra.dotProduct(lightVector, normal).toFloat()
+    override fun lambertianReflectance(pos: Vector, lightPos: Vector): Color {
+        val lightVector = (lightPos - pos).normalized()
+        val normal = (pos - center).normalized()
+        var dot = LA.dotProduct(lightVector, normal).toFloat()
         if (dot < 0) dot = 0F
         if (dot > 1) dot = 1F
         val incomingIntensity = 1 // in case we need to change this later

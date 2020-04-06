@@ -1,9 +1,9 @@
 package graphics
 
-import geometry.Coordinate
 import geometry.Intersection
 import geometry.Ray
 import geometry.SceneObject
+import geometry.Vector
 import util.LinearAlgebra
 
 /**
@@ -11,7 +11,7 @@ import util.LinearAlgebra
  * Can handle intersection calculation
  */
 class Scene(
-    val lightPos: Coordinate // TODO: Add support for multiple lights
+    val lightPos: Vector // TODO: Add support for multiple lights
 ) {
     private val objects : MutableList<SceneObject> = mutableListOf()
 

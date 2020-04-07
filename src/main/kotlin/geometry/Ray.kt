@@ -13,4 +13,8 @@ class Ray(
     fun pointAlongRay(t: Double): Vector {
         return origin + direction * t
     }
+
+    override fun toString(): String {
+        return "origin: $origin, direction: $direction"
+    }
 }

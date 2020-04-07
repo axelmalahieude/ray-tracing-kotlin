@@ -33,7 +33,7 @@ class Image(
         val bufferedImage = BufferedImage(width, height, TYPE_INT_ARGB)
         for (r in 0 until height) {
             for (c in 0 until width) {
-                val pixel = pixels[height - 1 - r][c] // make height go from MAX -> 0 otherwise image is flipped
+                val pixel = pixels[r][c] // make height go from MAX -> 0 otherwise image is flipped
                 bufferedImage.setRGB(c, r, pixel.rgb)
             }
         }

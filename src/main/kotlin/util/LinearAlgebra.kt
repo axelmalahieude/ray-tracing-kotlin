@@ -16,7 +16,7 @@ object LinearAlgebra {
         val ii = a.j * b.k - a.k * b.j
         val jj = a.k * b.i - a.i * b.k
         val kk = a.i * b.j - a.j * b.i
-        return Vector(ii, jj, kk)
+        return Vector(ii, jj, kk, Vector.VECTOR)
     }
 
     fun distance(c1: Vector, c2: Vector): Double {

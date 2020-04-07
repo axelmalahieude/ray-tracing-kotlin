@@ -30,7 +30,6 @@ class Raytracer(
                     image.pixels[r][c] = Color(0, 0, 0, 255)
                 } else {
                     // no intersection between point and light source; light illuminates this point
-                    println("LIGHT")
                     image.pixels[r][c] = intersection.obj.lambertianReflectance(intersection.point, scene.lightPos)
                 }
 

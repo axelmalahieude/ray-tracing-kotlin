@@ -1,5 +1,6 @@
 package graphics
 
+import geometry.Mat4
 import geometry.Ray
 import geometry.Vector
 import util.LinearAlgebra
@@ -11,19 +12,22 @@ import util.LinearAlgebra
  */
 class Viewport(
     val width: Int, // number of columns
-    val height: Int // number of rows
+    val height: Int, // number of rows
+    val cameraTransform: Mat4
 ) {
     private val imagePlaneZ = 0.0 // image plane is xy-plane
 
     // locate camera at -xMax to have 90 degree field of view
-    private val eye = Vector(0.0, 0.0, -1.0)
+    private val eye = Vector(0.0, 0.0, -1.0, Vector.POINT)
 
     /**
      * Calculate ray from eye to center of specified pixel
      */
     fun getRay(row: Int, col: Int): Ray {
-        val direction = getPixelCoordinate(row, col) - eye
-        return Ray(eye, direction)
+        val pixel = cameraTransform * getPixelCoordinate(row, col)
+        val origin = cameraTransform * eye
+        val direction = pixel - origin
+        return Ray(origin, direction)
     }
 
     /**
@@ -39,9 +43,7 @@ class Viewport(
         val x = 2 * (col + 0.5) / width - 1
         val y = 1 - 2 * (row + 0.5) / height
         val z = imagePlaneZ
-//        val x = -xMax + col + 0.5
-//        val y = -yMax + row + 0.5
 
-        return Vector(x, y, z)
+        return Vector(x, y, z, Vector.POINT)
     }
 }

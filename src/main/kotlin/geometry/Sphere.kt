@@ -2,6 +2,8 @@ package geometry
 
 import util.LinearAlgebra as LA
 import java.awt.Color
+import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
@@ -14,7 +16,7 @@ class Sphere(
     /**
      * Determine if a ray intersects this sphere
      */
-    override fun intersect(ray: Ray): Vector? {
+    override fun intersect(ray: Ray): Double? {
         val centeredRayStart = ray.origin - center
 
         val b = 2 * LA.dotProduct(ray.direction, centeredRayStart)
@@ -24,17 +26,18 @@ class Sphere(
         return when {
             // ensure intersections are in front of the ray by checking for positive intersection times
             discriminant == 0.0 -> {
-                val t = -b / 2
-                if (t > 0) ray.pointAlongRay(t)
-                else null
+                -b / 2
             }
             discriminant > 0.0 -> {
                 val sq = sqrt(discriminant)
                 val t0 = (-b + sq) / 2
                 val t1 = (-b - sq) / 2
-                if (t0 > 0 && t1 > 0) {
-                    ray.pointAlongRay(min(t0, t1))
-                } else null
+                when {
+                    // return closest intersection
+                    abs(t0) > abs(t1) -> t1
+                    abs(t1) > abs(t0) -> t0
+                    else -> null
+                }
             }
             else -> null // discriminant < 0.0
         }

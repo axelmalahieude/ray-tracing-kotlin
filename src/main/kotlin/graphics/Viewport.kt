@@ -13,19 +13,20 @@ import util.LinearAlgebra
 class Viewport(
     val width: Int, // number of columns
     val height: Int, // number of rows
+    val eye: Vector,
     val cameraTransform: Mat4
 ) {
     private val imagePlaneZ = 0.0 // image plane is xy-plane
 
-    // locate camera at -xMax to have 90 degree field of view
-    private val eye = Vector(0.0, 0.0, -1.0, Vector.POINT)
+    init {
+    }
 
     /**
      * Calculate ray from eye to center of specified pixel
      */
     fun getRay(row: Int, col: Int): Ray {
         val pixel = cameraTransform * getPixelCoordinate(row, col)
-        val origin = cameraTransform * eye
+        val origin = (cameraTransform * eye)
         val direction = pixel - origin
         return Ray(origin, direction)
     }

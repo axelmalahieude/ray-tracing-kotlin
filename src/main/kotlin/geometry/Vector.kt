@@ -2,6 +2,11 @@ package geometry
 
 import kotlin.math.sqrt
 
+/**
+ * Vector implementation that uses homogeneous coordinates;
+ * i.e., vectors in 3D space represented with 4 coordinate, the 4th
+ * signifying whether it is a vector or a point
+ */
 class Vector(
     var i: Double,
     var j: Double,
@@ -10,7 +15,7 @@ class Vector(
 ) {
 
     // Ensure homogeneous coordinates; if w != 1.0 or 0.0 then illegal vector operations likely occurred;
-    // examples are arithmetic between point and vector and summing two points
+    // examples are arithmetic between point and vector and summing two points, and possibly matrix operations
     init {
         if (w != 0.0 && w != 1.0) {
             throw InstantiationException("Expected homogeneous coordinate 1 or 0; was $w")
@@ -28,6 +33,10 @@ class Vector(
     fun normalized(): Vector {
         val magnitude = sqrt(i * i + j * j + k * k)
         return Vector(i / magnitude, j / magnitude, k / magnitude, w)
+    }
+
+    fun dot(v: Vector): Double {
+        return i * v.i + j * v.j + k * v.k
     }
 
     /**
@@ -51,6 +60,6 @@ class Vector(
     }
 
     override fun toString(): String {
-        return "<$i, $j, $k>"
+        return "<$i, $j, $k, $w>"
     }
 }

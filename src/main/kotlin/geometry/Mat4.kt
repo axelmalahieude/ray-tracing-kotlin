@@ -1,101 +1,133 @@
 package geometry
 
 import util.LinearAlgebra
+import kotlin.math.cos
+import kotlin.math.sin
 
 class Mat4 {
 
-    // TODO: Implement a "look at" method to angle the camera appropriately
+    companion object {
+        const val SIZE = 4
+        fun calcRotation(from: Vector, to: Vector): Mat4 {
+            val i = from.normalized()
+            val k = LinearAlgebra.crossProduct(from, to).normalized()
+            val j = LinearAlgebra.crossProduct(k, from).normalized()
+            return Mat4(i, j, k, Vector(0.0, 0.0, 0.0, 1.0))
+        }
 
-    private val SIZE = 4
+        fun identity(): Mat4 {
+            return Mat4()
+        }
 
-    // Initialize matrix to identity
-    protected val entries : Array<Array<Double>> = Array(SIZE) { Array(SIZE) {0.0} }
+        fun scale(factor: Double): Mat4 {
+            // note that this matrix only looks nice because it is symmetric
+            return Mat4(Vector.VEC_I * factor, Vector.VEC_J * factor, Vector.VEC_K * factor, Vector.VEC_W)
+        }
 
-    constructor() {
+        fun translation(x: Double, y: Double, z: Double): Mat4 {
+            return Mat4(Vector.VEC_I, Vector.VEC_J, Vector.VEC_K, Vector(x, y, z, Vector.POINT))
+        }
+
+        /**
+         * Rotation angle should be in radians, axis should be normalized
+         * https://en.wikipedia.org/wiki/Rotation_matrix
+         */
+        fun rotation(axis: Vector, angle: Double): Mat4 {
+            val i = Vector(
+                cos(angle) + axis.x * axis.x * (1 - cos(angle)),
+                axis.y * axis.x * (1 - cos(angle)) + axis.z * sin(angle),
+                axis.z * axis.x * (1 - cos(angle)) - axis.y * sin(angle),
+                Vector.VECTOR
+            )
+            val j = Vector(
+                axis.x * axis.y * (1 - cos(angle)) - axis.z * sin(angle),
+                cos(angle) + axis.y * axis.y * (1 - cos(angle)),
+                axis.z * axis.y * (1 - cos(angle)) + axis.x * sin(angle),
+                Vector.VECTOR
+            )
+            val k = Vector(
+                axis.x * axis.z * (1 - cos(angle)) + axis.y * sin(angle),
+                axis.y * axis.z * (1 - cos(angle)) - axis.x * sin(angle),
+                cos(angle) + axis.z * axis.z * (1 - cos(angle)),
+                Vector.VECTOR
+            )
+            val w = Vector(0.0, 0.0, 0.0, 1.0)
+            return Mat4(i, j, k, w)
+        }
+
+        fun rotateAroundPoint(axis: Vector, angle: Double, point: Vector): Mat4 {
+            val translationToOrigin = translation(-point.x, -point.y, -point.z)
+            val rotation = rotation(axis, angle)
+            val translationBack = translation(point.x, point.y, point.z)
+            return translationBack * rotation * translationToOrigin
+        }
+    }
+
+    private val entries : Array<Array<Double>> = Array(SIZE) { Array(SIZE) {0.0} }
+
+    private constructor() {
+        // identity matrix by default
         for (i in 0 until SIZE) {
             entries[i][i] = 1.0
         }
     }
 
-    constructor(x: Vector, y: Vector, z: Vector, p: Vector) {
-        entries[0][0] = x.i
-        entries[1][0] = x.j
-        entries[2][0] = x.k
-        entries[3][0] = x.w
+    private constructor(i: Vector, j: Vector, k: Vector, p: Vector) {
+        entries[0][0] = i.x
+        entries[1][0] = i.y
+        entries[2][0] = i.z
+        entries[3][0] = i.w
 
-        entries[0][1] = y.i
-        entries[1][1] = y.j
-        entries[2][1] = y.k
-        entries[3][1] = y.w
+        entries[0][1] = j.x
+        entries[1][1] = j.y
+        entries[2][1] = j.z
+        entries[3][1] = j.w
 
-        entries[0][2] = z.i
-        entries[1][2] = z.j
-        entries[2][2] = z.k
-        entries[3][2] = z.w
+        entries[0][2] = k.x
+        entries[1][2] = k.y
+        entries[2][2] = k.z
+        entries[3][2] = k.w
 
-        entries[0][3] = p.i
-        entries[1][3] = p.j
-        entries[2][3] = p.k
+        entries[0][3] = p.x
+        entries[1][3] = p.y
+        entries[2][3] = p.z
         entries[3][3] = p.w
     }
 
-    /**
-     * From UCLA CS174A tiny-graphics WebGL library
-     * (I took the class in Winter 2020)
-     *
-     * https://github.com/encyclopedia-of-code/tiny-graphics-js
-     */
-    fun lookAt(eye: Vector, at: Vector, up: Vector): Mat4 {
-        var k = (eye - at).normalized()
-        val i = LinearAlgebra.crossProduct(up, k).normalized()
-        val j = LinearAlgebra.crossProduct(k, i).normalized()
-        k *= -1.0
+    private constructor(m00: Double, m01: Double, m02: Double, m03: Double,
+                m10: Double, m11: Double, m12: Double, m13: Double,
+                m20: Double, m21: Double, m22: Double, m23: Double,
+                m30: Double, m31: Double, m32: Double, m33: Double) {
+        entries[0][0] = m00
+        entries[1][0] = m10
+        entries[2][0] = m20
+        entries[3][0] = m30
 
-        val translation = Mat4(Vector.VEC_I, Vector.VEC_J, Vector.VEC_K, Vector(i.dot(eye), j.dot(eye), k.dot(eye), 1.0))
-        val rotation = Mat4(i, j, k, Vector(0.0, 0.0, 0.0, 1.0))
+        entries[0][1] = m01
+        entries[1][1] = m11
+        entries[2][1] = m21
+        entries[3][1] = m31
 
-        return translation * rotation
+        entries[0][2] = m02
+        entries[1][2] = m12
+        entries[2][2] = m22
+        entries[3][2] = m32
+
+        entries[0][3] = m03
+        entries[1][3] = m13
+        entries[2][3] = m23
+        entries[3][3] = m33
     }
 
     /**
-     * Linear transformations
-     */
-
-    fun scale(factor: Double): Mat4 {
-        for (i in 0 until SIZE - 1) {
-            entries[i][i] = entries[i][i] * factor
-        }
-        return this
-    }
-
-    fun translate(x: Double, y: Double, z: Double): Mat4 {
-        entries[0][SIZE - 1] = entries[0][SIZE - 1] + x
-        entries[1][SIZE - 1] = entries[1][SIZE - 1] + y
-        entries[2][SIZE - 1] = entries[2][SIZE - 1] + z
-        return this
-    }
-
-    /**
-     * Overloaded shortcut functions for linear transformations
-     */
-
-    fun scale(factor: Int): Mat4 {
-        return scale(factor.toDouble())
-    }
-
-    fun translate(x: Int, y: Int, z: Int): Mat4 {
-        return translate(x.toDouble(), y.toDouble(), z.toDouble())
-    }
-
-    /**
-     * Overrides
+     * Overrides for matrix * vector and matrix * matrix
      */
 
     operator fun times(v: Vector): Vector {
-        val i = v.i * entries[0][0] + v.j * entries[0][1] + v.k * entries[0][2] + v.w * entries[0][3]
-        val j = v.i * entries[1][0] + v.j * entries[1][1] + v.k * entries[1][2] + v.w * entries[1][3]
-        val k = v.i * entries[2][0] + v.j * entries[2][1] + v.k * entries[2][2] + v.w * entries[2][3]
-        val w = v.i * entries[3][0] + v.j * entries[3][1] + v.k * entries[3][2] + v.w * entries[3][3]
+        val i = v.x * entries[0][0] + v.y * entries[0][1] + v.z * entries[0][2] + v.w * entries[0][3]
+        val j = v.x * entries[1][0] + v.y * entries[1][1] + v.z * entries[1][2] + v.w * entries[1][3]
+        val k = v.x * entries[2][0] + v.y * entries[2][1] + v.z * entries[2][2] + v.w * entries[2][3]
+        val w = v.x * entries[3][0] + v.y * entries[3][1] + v.z * entries[3][2] + v.w * entries[3][3]
         return Vector(i, j, k, w)
     }
 

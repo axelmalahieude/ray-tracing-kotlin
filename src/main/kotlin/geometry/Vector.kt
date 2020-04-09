@@ -8,9 +8,9 @@ import kotlin.math.sqrt
  * signifying whether it is a vector or a point
  */
 class Vector(
-    var i: Double,
-    var j: Double,
-    var k: Double,
+    var x: Double,
+    var y: Double,
+    var z: Double,
     var w: Double
 ) {
 
@@ -28,22 +28,28 @@ class Vector(
         val VEC_I = Vector(1.0, 0.0, 0.0, 0.0)
         val VEC_J = Vector(0.0, 1.0, 0.0, 0.0)
         val VEC_K = Vector(0.0, 0.0, 1.0, 0.0)
+        val VEC_W = Vector(0.0, 0.0, 0.0, 1.0)
     }
 
     fun normalized(): Vector {
-        val magnitude = sqrt(i * i + j * j + k * k)
-        return Vector(i / magnitude, j / magnitude, k / magnitude, w)
+        val magnitude = sqrt(x * x + y * y + z * z)
+        return Vector(x / magnitude, y / magnitude, z / magnitude, w)
     }
 
     fun dot(v: Vector): Double {
-        return i * v.i + j * v.j + k * v.k
+        return x * v.x + y * v.y + z * v.z
+    }
+
+    fun toPoint(): Vector {
+        w = Vector.POINT
+        return this
     }
 
     /**
      * Vector scaling
      */
     operator fun times(n: Double): Vector {
-        return Vector(i * n, j * n, k * n, w)
+        return Vector(x * n, y * n, z * n, w) // homogeneous coordinate doesn't change
     }
     operator fun div(n: Double): Vector {
         return this * (1 / n)
@@ -53,13 +59,13 @@ class Vector(
      * Vector arithmetic
      */
     operator fun minus(v: Vector): Vector {
-        return Vector(i - v.i, j - v.j, k - v.k, w - v.w)
+        return Vector(x - v.x, y - v.y, z - v.z, w - v.w)
     }
     operator fun plus(v: Vector): Vector {
-        return Vector(i + v.i, j + v.j, k + v.k, w + v.w)
+        return Vector(x + v.x, y + v.y, z + v.z, w + v.w)
     }
 
     override fun toString(): String {
-        return "<$i, $j, $k, $w>"
+        return "<$x, $y, $z, $w>"
     }
 }

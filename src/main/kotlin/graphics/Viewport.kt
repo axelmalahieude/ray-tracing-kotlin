@@ -35,9 +35,6 @@ class Viewport(
      * Get camera coordinates for a specific pixel in image plane.
      * Adjusted to get center of pixel, instead of a corner of the pixel
      *
-     * bottom left = row 0, column 0
-     * top right   = row xMax, column xMax
-     *
      * See https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
      */
     private fun getPixelCoordinate(row: Int, col: Int): Vector {

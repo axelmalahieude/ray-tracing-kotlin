@@ -28,6 +28,10 @@ class Mat4 {
             return Mat4(Vector.VEC_I, Vector.VEC_J, Vector.VEC_K, Vector(x, y, z, Vector.POINT))
         }
 
+        fun translation(v: Vector): Mat4 {
+            return translation(v.x, v.y, v.z)
+        }
+
         /**
          * Rotation angle should be in radians, axis should be normalized
          * https://en.wikipedia.org/wiki/Rotation_matrix
@@ -56,9 +60,9 @@ class Mat4 {
         }
 
         fun rotateAroundPoint(axis: Vector, angle: Double, point: Vector): Mat4 {
-            val translationToOrigin = translation(-point.x, -point.y, -point.z)
+            val translationToOrigin = translation(point * -1.0)
             val rotation = rotation(axis, angle)
-            val translationBack = translation(point.x, point.y, point.z)
+            val translationBack = translation(point)
             return translationBack * rotation * translationToOrigin
         }
     }

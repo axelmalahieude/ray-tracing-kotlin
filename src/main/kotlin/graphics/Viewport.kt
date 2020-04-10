@@ -13,20 +13,19 @@ import util.LinearAlgebra
 class Viewport(
     val width: Int, // number of columns
     val height: Int, // number of rows
-    val eye: Vector,
-    val cameraTransform: Mat4
+    val camera: Camera
 ) {
-    private val imagePlaneZ = 0.0 // image plane is xy-plane
 
-    init {
+    companion object {
+        const val IMAGE_PLANE_Z = 0.0 // image plane is xy-plane --> see Camera.kt
     }
 
     /**
      * Calculate ray from eye to center of specified pixel
      */
     fun getRay(row: Int, col: Int): Ray {
-        val pixel = cameraTransform * getPixelCoordinate(row, col)
-        val origin = (cameraTransform * eye)
+        val pixel = camera.transform * getPixelCoordinate(row, col)
+        val origin = camera.transform * Camera.STARTING_POSITION // precompute this
         val direction = pixel - origin
         return Ray(origin, direction)
     }
@@ -40,7 +39,7 @@ class Viewport(
     private fun getPixelCoordinate(row: Int, col: Int): Vector {
         val x = 2 * (col + 0.5) / width - 1
         val y = 1 - 2 * (row + 0.5) / height
-        val z = imagePlaneZ
+        val z = IMAGE_PLANE_Z
 
         return Vector(x, y, z, Vector.POINT)
     }

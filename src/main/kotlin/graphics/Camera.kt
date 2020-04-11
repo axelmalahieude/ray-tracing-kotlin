@@ -6,7 +6,7 @@ import util.LinearAlgebra
 import kotlin.math.acos
 
 class Camera(
-    eye: Vector,
+    val eye: Vector,
     lookAt: Vector
 ) {
     companion object {
@@ -15,23 +15,24 @@ class Camera(
     }
 
     var transform = Mat4.identity()
-    // TODO: Investigate why transform * STARTING_POSITION != eye; slightly off
-    // effect is somewhat neutralized by explicitly using eye instead of transform * STARTING_POSITION
-    // this implies that the transform matrix isn't correct
-    // therefore the image may be slightly distorted since we need to use transform matrix to transform
-    //   each of the pixel coordinates
 
     init {
         val oldCameraDir = (lookAt - STARTING_POSITION).normalized()
         val newCameraDir = (lookAt - eye).normalized()
         val axis = LinearAlgebra.crossProduct(oldCameraDir, newCameraDir).normalized()
         val angle = acos(LinearAlgebra.dotProduct(oldCameraDir, newCameraDir))
-        val cameraRotation = Mat4.rotation(axis, angle)
-        val cameraTranslation = Mat4.translation(eye - STARTING_POSITION)
+        val cameraRotation = if (oldCameraDir.parallel(newCameraDir)) {
+            Mat4.identity() // no need to rotate our camera if we're looking down same axis as START
+        } else {
+            Mat4.rotateAroundPoint(axis, angle, STARTING_POSITION) // rotate START around itself
+        }
+        val cameraTranslation = Mat4.translation(eye - STARTING_POSITION) // move to new eye location
         // TODO: Need final rotation in accordance with up direction so camera isn't skewed
+
         transform = cameraTranslation * cameraRotation
 
-        println(transform * STARTING_POSITION)
-        println(eye)
+//        if (test != STARTING_POSITION) {
+//            throw Exception("Bad camera rotation matrix; check parameters")
+//        }
     }
 }

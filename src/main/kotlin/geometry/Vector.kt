@@ -1,5 +1,6 @@
 package geometry
 
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 /**
@@ -34,6 +35,10 @@ class Vector(
     fun normalized(): Vector {
         val magnitude = sqrt(x * x + y * y + z * z)
         return Vector(x / magnitude, y / magnitude, z / magnitude, w)
+    }
+
+    fun parallel(v: Vector): Boolean {
+        return abs(this.normalized().dot(v.normalized())) == 1.0
     }
 
     fun dot(v: Vector): Double {

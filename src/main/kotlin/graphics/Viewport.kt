@@ -25,7 +25,7 @@ class Viewport(
      */
     fun getRay(row: Int, col: Int): Ray {
         val pixel = camera.transform * getPixelCoordinate(row, col)
-        val origin = camera.transform * Camera.STARTING_POSITION // precompute this
+        val origin = camera.eye
         val direction = pixel - origin
         return Ray(origin, direction)
     }

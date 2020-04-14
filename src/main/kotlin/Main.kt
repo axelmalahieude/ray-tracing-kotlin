@@ -16,7 +16,7 @@ fun main() {
 
     // Set up camera and viewport matrix
     val lookat = Vector(0.0, 0.0, 5.0, Vector.POINT)
-    val eye = Camera.STARTING_POSITION //Vector(-1.0, -1.0, 0.0, Vector.POINT)
+    val eye = Vector(-1.0, -1.0, 0.0, Vector.POINT)
     val camera = Camera(eye, lookat)
     val viewport = Viewport(width, height, camera)
 

@@ -70,6 +70,11 @@ class Vector(
         return Vector(x + v.x, y + v.y, z + v.z, w + v.w)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is Vector) return false
+        return other.w == w && other.y == y && other.z == z && other.x == x
+    }
+
     override fun toString(): String {
         return "<$x, $y, $z, $w>"
     }

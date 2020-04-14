@@ -31,8 +31,10 @@ class Camera(
 
         transform = cameraTranslation * cameraRotation
 
-//        if (test != STARTING_POSITION) {
-//            throw Exception("Bad camera rotation matrix; check parameters")
-//        }
+        println(transform * STARTING_POSITION)
+        println(eye)
+        if (transform * STARTING_POSITION != eye) {
+            throw Exception("Bad camera rotation matrix; check parameters")
+        }
     }
 }

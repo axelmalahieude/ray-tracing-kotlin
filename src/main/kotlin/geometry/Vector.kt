@@ -45,9 +45,12 @@ class Vector(
         return x * v.x + y * v.y + z * v.z
     }
 
-    fun toPoint(): Vector {
-        w = Vector.POINT
-        return this
+    fun isPoint(): Boolean {
+        return w == POINT
+    }
+
+    fun isVector(): Boolean {
+        return w == VECTOR
     }
 
     /**

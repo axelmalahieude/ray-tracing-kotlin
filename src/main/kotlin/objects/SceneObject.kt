@@ -1,5 +1,7 @@
-package geometry
+package objects
 
+import geometry.Ray
+import geometry.Vector
 import java.awt.Color
 
 interface SceneObject {

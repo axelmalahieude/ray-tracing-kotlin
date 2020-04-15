@@ -2,7 +2,7 @@ package graphics
 
 import geometry.Intersection
 import geometry.Ray
-import geometry.SceneObject
+import objects.SceneObject
 import geometry.Vector
 import util.LinearAlgebra
 

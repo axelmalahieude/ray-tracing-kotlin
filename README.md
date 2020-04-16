@@ -7,13 +7,16 @@ Goal is to be able to create a scene with various shapes on a surface, and rende
 and applying Lambertian reflectance. 
 See examples in `images/`
 
+![alt text](https://github.com/axelmalahieude/ray-tracing-kotlin/blob/master/images/2020-04-14%2021-18-56.png)
+
+Features shown in this image: 2 spheres and a planar surface, with shadows cast from the light source being in the top left.
+
 **Current to-dos**:
 - Trace the reflected ray
-- Create surface under spheres
-- Eventually add linear transformations to make scene building easier
 - Implement Phong Shading
+- Eventually try anti-aliasing
 
 **Completed to-dos**:
-- Consolidate coordinate and vector classes
+- Created planar surface under spheres
 - Added some linear transformations to help with placing the camera
 

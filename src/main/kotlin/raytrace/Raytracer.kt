@@ -4,7 +4,6 @@ import geometry.Ray
 import graphics.Image
 import graphics.Scene
 import graphics.Viewport
-import util.LinearAlgebra
 import java.awt.Color
 
 class Raytracer(
@@ -20,17 +19,17 @@ class Raytracer(
                 val ray = viewport.getRay(r, c)
 
                 // find closest intersection of ray with an object
-                val intersection = scene.findIntersection(ray) ?: continue
+                val (intPoint, intObj) = scene.findIntersection(ray) ?: continue
 
                 // cast shadow ray to the light source
-                val shadowRayDirection = scene.lightPos - intersection.point
-                val shadowRay = Ray(intersection.point, shadowRayDirection)
+                val shadowRayDirection = scene.lightPos - intPoint
+                val shadowRay = Ray(intPoint, shadowRayDirection)
                 if (scene.findIntersection(shadowRay) != null) {
                     // no contribution from this light source; something is blocking it
-                    image.pixels[r][c] = Color(0, 0, 0, 255)
+                    image.pixels[r][c] = Color(0)
                 } else {
                     // no intersection between point and light source; light illuminates this point
-                    image.pixels[r][c] = intersection.obj.lambertianReflectance(intersection.point, scene.lightPos)
+                    image.pixels[r][c] = intObj.colorAt(intPoint, scene.lightPos)
                 }
 
                 // recursively cast reflected and refracted ray

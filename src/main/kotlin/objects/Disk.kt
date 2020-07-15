@@ -2,10 +2,12 @@ package objects
 
 import geometry.Ray
 import geometry.Vector
+import graphics.Material
 import util.LinearAlgebra
 import java.awt.Color
 
 class Disk( // disk is easier to model than a plane
+    override val material: Material,
     val normal: Vector,
     val center: Vector,
     val radius: Double = 10.0
@@ -30,7 +32,7 @@ class Disk( // disk is easier to model than a plane
         return t
     }
 
-    override fun lambertianReflectance(pos: Vector, lightPos: Vector): Color {
-        return Color(255, 255, 255, 255)
+    override fun colorAt(pos: Vector, lightPos: Vector): Color {
+        return material.color
     }
 }

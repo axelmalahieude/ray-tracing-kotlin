@@ -24,8 +24,8 @@ class Scene(
     /**
      * Determine if a ray intersects any object in this scene
      */
-    fun findIntersection(ray: Ray): Intersection? {
-        var intersection: Intersection? = null
+    fun findIntersection(ray: Ray): Pair<Vector, SceneObject>? {
+        var intersection: Pair<Vector, SceneObject>? = null
         var currDist = Double.MAX_VALUE
         for (it in objects) {
 
@@ -39,7 +39,7 @@ class Scene(
             // determine if this is the first object the ray intersects
             val dist = LinearAlgebra.distance(ray.origin, point)
             if (dist < currDist) {
-                intersection = Intersection(point, it)
+                intersection = Pair(point, it)
                 currDist = dist
             }
         }

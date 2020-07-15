@@ -2,15 +2,16 @@ package objects
 
 import geometry.Ray
 import geometry.Vector
+import graphics.Material
 import util.LinearAlgebra as LA
 import java.awt.Color
 import kotlin.math.abs
 import kotlin.math.sqrt
 
 class Sphere(
+    override val material: Material,
     private val center : Vector,
-    private val radius : Double,
-    var color : Color
+    private val radius : Double
 ) : SceneObject {
 
     /**
@@ -43,7 +44,7 @@ class Sphere(
         }
     }
 
-    override fun lambertianReflectance(pos: Vector, lightPos: Vector): Color {
+    override fun colorAt(pos: Vector, lightPos: Vector): Color {
         val lightVector = (lightPos - pos).normalized()
         val normal = (pos - center).normalized()
         var dot = LA.dotProduct(lightVector, normal).toFloat()
@@ -52,10 +53,10 @@ class Sphere(
         val incomingIntensity = 1 // in case we need to change this later
 
         // Lambertian Reflectance: I = L*N*c*i (dot product of light and normal, multiplied by intensity and color)
-        val r = dot * color.red * incomingIntensity
-        val g = dot * color.green * incomingIntensity
-        val b = dot * color.blue * incomingIntensity
-        val alpha = color.alpha.toFloat() // don't scale alpha
+        val r = dot * material.color.red * incomingIntensity
+        val g = dot * material.color.green * incomingIntensity
+        val b = dot * material.color.blue * incomingIntensity
+        val alpha = material.color.alpha.toFloat() // don't scale alpha
         return Color(r / 255, g / 255 , b / 255, alpha / 255)
     }
 
